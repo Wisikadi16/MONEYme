@@ -94,7 +94,30 @@
             
             <!-- Quick Actions -->
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 class="text-lg font-semibold text-gray-800 mb-4">Aksi Cepat</h2>
+                <h2 class="text-lg font-semibold text-gray-800 mb-4">Pencatatan Cepat</h2>
+                
+                @if(isset($quickActions) && $quickActions->count() > 0)
+                <div class="mb-4">
+                    <p class="text-xs text-gray-500 mb-2 uppercase tracking-wide font-medium">Template Anda</p>
+                    <div class="flex flex-wrap gap-2">
+                        @foreach($quickActions as $qa)
+                        <form action="{{ route('transactions.quick') }}" method="POST" class="inline-block">
+                            @csrf
+                            <input type="hidden" name="template_id" value="{{ $qa->id }}">
+                            <button type="submit" class="flex items-center px-3 py-1.5 bg-gray-50 hover:bg-indigo-50 border border-gray-200 hover:border-indigo-200 rounded-full text-sm font-medium text-gray-700 hover:text-indigo-700 transition group" onclick="return confirm('Catat transaksi {{ $qa->name }} (Rp {{ number_format($qa->amount, 0, ',', '.') }}) sekarang?')">
+                                <span class="mr-1.5 group-hover:scale-110 transition-transform">{{ $qa->icon ?? '⚡' }}</span>
+                                {{ $qa->name }}
+                            </button>
+                        </form>
+                        @endforeach
+                        <a href="{{ route('templates.index') }}" class="flex items-center px-3 py-1.5 bg-white border border-dashed border-gray-300 hover:border-indigo-400 rounded-full text-sm font-medium text-gray-500 hover:text-indigo-600 transition">
+                            + Kelola Aksi Cepat
+                        </a>
+                    </div>
+                </div>
+                @endif
+
+                <p class="text-xs text-gray-500 mb-2 uppercase tracking-wide font-medium">Manual</p>
                 <div class="grid grid-cols-2 gap-3">
                     <a href="{{ route('transactions.create', ['type' => 'income']) }}" class="flex flex-col items-center justify-center p-4 bg-green-50 rounded-lg hover:bg-green-100 transition border border-green-100">
                         <span class="text-xl mb-1">💰</span>
@@ -103,10 +126,6 @@
                     <a href="{{ route('transactions.create', ['type' => 'expense']) }}" class="flex flex-col items-center justify-center p-4 bg-red-50 rounded-lg hover:bg-red-100 transition border border-red-100">
                         <span class="text-xl mb-1">💸</span>
                         <span class="text-sm font-medium text-red-700 text-center">Catat<br>Pengeluaran</span>
-                    </a>
-                    <a href="#" class="col-span-2 flex items-center justify-center p-3 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition border border-indigo-100 mt-1">
-                        <span class="text-xl mr-2">🎯</span>
-                        <span class="text-sm font-medium text-indigo-700">Target Tabungan (Segera)</span>
                     </a>
                 </div>
             </div>
@@ -121,6 +140,7 @@
                     </p>
                 </div>
             </div>
+            
 
         </div>
 

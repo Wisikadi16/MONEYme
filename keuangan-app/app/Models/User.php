@@ -44,4 +44,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(SavingGoal::class);
     }
+
+    public function transactionTemplates()
+    {
+        return $this->hasMany(TransactionTemplate::class);
+    }
 }

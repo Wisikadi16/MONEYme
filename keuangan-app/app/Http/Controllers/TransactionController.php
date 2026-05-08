@@ -60,4 +60,24 @@ class TransactionController extends Controller
 
         return redirect()->route('dashboard')->with('success', 'Transaksi berhasil ditambahkan!');
     }
+
+    public function quickAction(Request $request)
+    {
+        $request->validate([
+            'template_id' => 'required|exists:transaction_templates,id',
+        ]);
+
+        $template = \App\Models\TransactionTemplate::findOrFail($request->template_id);
+        
+        Transaction::create([
+            'user_id' => $template->user_id,
+            'category_id' => $template->category_id,
+            'amount' => $template->amount,
+            'type' => $template->type,
+            'description' => $template->name,
+            'date' => \Carbon\Carbon::now()->format('Y-m-d'),
+        ]);
+
+        return redirect()->route('dashboard')->with('success', "Transaksi '{$template->name}' berhasil dicatat!");
+    }
 }

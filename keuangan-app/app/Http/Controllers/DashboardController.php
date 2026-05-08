@@ -46,12 +46,18 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
+        // Ambil User Pertama (karena belum ada auth)
+        $user = \App\Models\User::first();
+        
+        $quickActions = \App\Models\TransactionTemplate::all();
+
         return view('dashboard', compact(
             'saldo', 
             'incomeBulanIni', 
             'expenseBulanIni', 
             'pesanInsight', 
-            'recentTransactions'
+            'recentTransactions',
+            'quickActions'
         ));
     }
 }
